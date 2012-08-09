@@ -83,6 +83,14 @@
           (even? n) (recur (/ n 2) (inc s))
           (odd? n) (recur (inc (* 3 n)) (inc s)))))
 
+(defn fetch-text-url
+  "Fetch an url with text data"
+  [url]
+  (with-open [stream (.openStream (java.net.URL. url))]
+    (let [buf (java.io.BufferedReader.
+               (java.io.InputStreamReader. stream))]
+      (apply str (line-seq buf)))))
+
 (defn p1
   "Sum all multiples of 3 or 5 below 1000"
   []
@@ -149,13 +157,18 @@
             20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16
             20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
             01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48]
-        a [[0 0] [1 0] [2 0] [3 0]]
-        b [[0 0] [0 1] [0 2] [0 3]]
-        c [[0 0] [1 1] [2 2] [3 3]]
-        d [[0 0] [-1 1] [-2 2] [-3 3]]]
-    (let [x 0 y 0]
-      (for [d [a b c]]
-        (map #(map + % [x y]) d)))))
+        to-east  [[0 0] [1 0] [2 0] [3 0]]
+        points (fn [[a b c d]] (fn [xy] (map + a xy)))
+        fitter (fn [[_ _ _ [dx dy]]] (fn [[x y]] (and
+                                                (<= 0 (+ dx x))
+                                                (< (+ dx x) 20)
+                                                (<= 0 (+ dy y))
+                                                (< (+ dy y) 20))))]
+    
+    (for [d [to-east]]
+      (filter (fitter d) (for [x (range 20)
+                               y (range 20)]
+                           [x y]))))))
 
 (defn p14
   "Find starting number for the longest chain"
@@ -164,12 +177,6 @@
         max (reduce max lengths)
         pre (take-while #(not (= max %)) lengths)]
     (inc (count pre))))
-
-(defn p15
-  [n m]
-  (cond (or (zero? n) (zero? m)) 1
-        :else (+ (p15 (dec n) m)
-                 (p15 n (dec m)))))
 
 (defn p15
   "Number of paths w/o backtracking:
@@ -202,6 +209,16 @@
                 (for [year (range 1901 2001)
                       month (range 1 13)]
                   (date-time year month 1))))))
+
+(defn p22
+  "What is the total name score in the file."
+  []
+  (let [url "http://projecteuler.net/project/names.txt"
+        text (clojure.string/replace (fetch-text-url url) #"\"" "")
+        names (sort (clojure.string/split text #","))
+        name-weight (fn [name]
+                      (reduce + (map #(inc (- (int %) (int \A))) (seq name))))]
+    (reduce + (map-indexed (fn [i name] (* (inc i) (name-weight name))) names))))
 
 (defn p24
   "What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?"
