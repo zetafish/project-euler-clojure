@@ -8,7 +8,7 @@
   [n]
   (map #(binomial n %) (range (inc n))))
 
-(defn p35
+(defn p53
   [n]
   (map #(->> (coefs %)
              (filter (fn [c] (> c 1000000)))
