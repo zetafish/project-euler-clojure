@@ -1,9 +1,13 @@
-(defn p34
-  "Find sum of all curious numbers (equal to ! of it's digits)"
-  []
-  (let [limit (* 6 (reduce * (range 1 10)))
-        fac (loop [v [0] f 1 n 1]
-              (if (= n 10) v
-                  (recur (conj v f) (* f (inc n)) (inc n))))
-        fac-sum (fn [n] (reduce + (map #(get fac %) (digitize n))))]
-    (filter #(= % (fac-sum %)) (range 1 limit))))
+(defn digits [n]
+  ( map #(- (int %) 48) (str n))) 
+
+(defn factorial [n]
+  (loop [n n acc 1]
+    (if (= 0 n)
+      acc
+      (recur (dec n) (* n acc)))))
+
+(defn curious? [n]
+  (= n (reduce + (map factorial (digits n)))))
+
+(reduce + (filter curious? (range 3 50000)))

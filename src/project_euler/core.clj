@@ -25,8 +25,6 @@
   (cons n
         (lazy-seq (lazy-sieve (filter #(> (mod % n) 0) ns)))))
 
-
-
 (defn sieve [n]
   (let [n (int n)]
     "Returns a list of all primes from 2 to n"
