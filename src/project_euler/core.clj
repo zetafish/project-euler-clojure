@@ -85,7 +85,7 @@
   (with-open [stream (.openStream (java.net.URL. url))]
     (let [buf (java.io.BufferedReader.
                (java.io.InputStreamReader. stream))]
-      (apply str (line-seq buf))))))
+      (apply str (line-seq buf)))))
 
 
 

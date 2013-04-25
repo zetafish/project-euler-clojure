@@ -1,5 +1,5 @@
 (ns project-euler.p043
-  (:use (clojure.math.combinatorics)))
+  (:use clojure.math.combinatorics))
 
 (defn multiple-of [n]
   (fn [x] (zero? (rem x n))))
