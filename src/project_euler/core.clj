@@ -49,17 +49,23 @@
                    (conj result i)
                    result)))))))
 
-(defn factorize
-  "Get prime factors of a number"
-  [num]
-  (loop [primes (sieve (Math/ceil (Math/sqrt num)))
-         factors []
-         n num]
+(defn factors [n]
+  (loop [primes (sieve (inc n))
+         factors ()
+         n n]
     (let [p (first primes)]
       (cond (= 1 n) factors
-            (empty? primes) (throw "asdf")
             (zero? (mod n p)) (recur primes (cons p factors) (/ n p))
             :else (recur (rest primes) factors n)))))
+
+(defn divisors [n]
+  (let [f (factors n)]
+    (->> (range (inc (count f)))
+         (mapcat #(combinations f %))
+         (map #(reduce * %))
+         distinct
+         sort
+         (remove #(= n %)))))
 
 (defn colatz
   "Generate colatz sequence"
@@ -99,11 +105,11 @@
           (if (zero? c) numbers
               (recur (conj numbers cur) (int next) (dec c))))))))
 
-(defn digitize [n]
-  (loop [digits [] n n]
-    (if (zero? n)
-      digits
-      (recur (cons (mod n 10) digits) (quot n 10)))))
+(defn digits [n]
+  (->> n
+       str
+       seq
+       (map #(- (int %) 48))))
 
 
 
