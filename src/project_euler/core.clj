@@ -2,12 +2,11 @@
   (:use clojure.math.combinatorics
         clojure.math.numeric-tower
         clojure.core.memoize
-        clojure.set
-        clj-time.core))
+        clojure.set))
 
 (def fib-seq
   "Lazy sequence of fibonacci numbers"
-  ((fn rfib [a b] 
+  ((fn rfib [a b]
      (lazy-seq (cons a (rfib b (+' a b)))))
    0 1))
 
@@ -112,4 +111,11 @@
        (map #(- (int %) 48))))
 
 
+(defn perfect? [n]
+  (= n (reduce + (divisors n))))
 
+(defn deficient? [n]
+  (> n (reduce + (divisors n))))
+
+(defn abundant? [n]
+  (< n (reduce + (divisors n))))
