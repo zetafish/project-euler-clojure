@@ -1,5 +1,3 @@
-(ns project-euler.p035)
-
 (defn p35
   "How many circular primes are there below one million?"
   [lim]

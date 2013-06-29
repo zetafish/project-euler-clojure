@@ -1,6 +1,9 @@
-(defn p16
-  "What is the sum of the digits of the number 2^1000?"
-  []
-  (reduce + (map #(Integer. (str %))
-                 (seq (str (expt 2 1000))))))
+;; (ns project-euler.p016
+;;   (:use [clojure.math.numeric-tower]))
+
+;; (defn p016
+;;   "Power digit sum"
+;;   []
+;;  (reduce + (map #(Integer. (str %))
+;;                 (seq (str (expt 2 1000))))))
 
