@@ -1,5 +1,7 @@
-(ns project-euler.p008
-  (:use [project-euler.core]))
+(ns project-euler.p008-test
+  (:use [project-euler.core])
+  (:use [clojure.math.numeric-tower])
+  (:use [midje.sweet]))
 
 (def s [73167176531330624919225119674426574742355349194934
         96983520312774506326239578318016984801869478851843
@@ -22,11 +24,12 @@
         5886116467109405077541002256983155200055935729725
         71636269561882670428252483600823257530420752963450])
 
-(defn p008
-  "Largest product in a series"
-  []
-  (let [d (mapcat digits s)
+(fact "Largest product in a series"
+      (let [d (mapcat digits s)
         p (map #(take 5 (drop % d)) (range (- (count d) 4)))]
     (->> (map #(take 5 (drop % d)) (range (- (count d) 4)))
          (map #(reduce * %))
-         (reduce max))))
+         (reduce max)))
+      => 40824)
+
+
