@@ -23,12 +23,30 @@
            20 73 35 29 78 31 90  1 74 31 49 71 48 86 81 16 23 57  5 54
             1 70 54 71 83 51 54 69 16 92 33 48 61 43 52  1 89 19 67 48])
 
-(-> (for [x (range 0 16)]))
+(defn compute [[x y dx dy]]
+  (->> (range 4)
+       (map #(flatten (vector [(* % dx) (* % dy)])))
+       (map #(+ (+ (nth % 0) x)
+                (* 20 (+ (nth % 1) y))))
+       (map #(nth grid %))
+       (reduce *)))
+
+(defn permissible [[ x y dx dy]]
+  (let [x' (+ x (* 4 dx))
+        y' (+ y (* 4 dy))]
+    (and (<= 0 x') (< x' 20)
+         (<= 0 y') (< y' 20))))
+
+(defn combos []
+  (for [x (range 20)
+        y (range 20)
+        d [[0 1] [1 0] [1 1] [-1 1]]]
+    [x y (nth d 0) (nth d 1)]))
 
 (fact "Greatest product of four adjacent numbers"
-      (-> (for [x (range 0 20)
-                y (range 0 20)
-                d (map #([(* % (get))]) [[0 1] [1 0] [1 1] [-1 1]])]
-            [x y d])
-          (nth 35))
+      (->> (combos)
+           (filter permissible)
+           (map compute)
+           (reduce max))
       => 70600674)
+
