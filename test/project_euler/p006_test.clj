@@ -4,11 +4,15 @@
   (:use [midje.sweet])
   (:use [midje.config]))
 
-(fact "Sum square differences"
-      (let [rng (range 1 101)
+(defn f []
+  (let [rng (range 1 101)
             square #(* % %)]
         (- (square (reduce + rng))
-           (reduce + (map square rng))))
+           (reduce + (map square rng)))))
+
+(fact :solved
+      "Sum square differences"
+      (time (f))
       => 25164150)
 
 

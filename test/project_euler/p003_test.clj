@@ -2,11 +2,11 @@
   (:use [project-euler.core])
   (:use [midje.sweet]))
 
-(fact "The largest prime factor of 600851475143"
-      (let [num 600851475143N
-            primes (reverse (primes-below (Math/sqrt num)))]
-        (first (drop-while #(not (= 0 (mod num %)))
-                           primes)))
-      => 6857)
+(defn f []
+  (reduce max (factors 600851475143N)))
 
+(fact :solved
+      "The largest prime factor of 600851475143"
+      (time (f))
+      => 6857)
 

@@ -24,12 +24,16 @@
         5886116467109405077541002256983155200055935729725
         71636269561882670428252483600823257530420752963450])
 
-(fact "Largest product in a series"
-      (let [d (mapcat digits s)
+(defn f []
+  (let [d (mapcat digits s)
         p (map #(take 5 (drop % d)) (range (- (count d) 4)))]
     (->> (map #(take 5 (drop % d)) (range (- (count d) 4)))
          (map #(reduce * %))
-         (reduce max)))
+         (reduce max))) )
+
+(fact :solved
+      "Largest product in a series"
+      (time (f))
       => 40824)
 
 

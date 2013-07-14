@@ -2,7 +2,11 @@
   (:use [project-euler.core])
   (:use [midje.sweet]))
 
-(fact "Sum of all primes below 2 million"
-      (reduce + (take-while #(< % 2000000)
-                            lazy-primes))
+(defn f []
+  (reduce + (take-while #(< % 2000000)
+                        lazy-primes)))
+
+(fact :solved
+      "Sum of all primes below 2 million"
+      (time (f))
       => 142913828922)

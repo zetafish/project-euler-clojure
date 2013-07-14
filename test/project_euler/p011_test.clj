@@ -43,10 +43,14 @@
         d [[0 1] [1 0] [1 1] [-1 1]]]
     [x y (nth d 0) (nth d 1)]))
 
-(fact "Greatest product of four adjacent numbers"
-      (->> (combos)
-           (filter permissible)
-           (map compute)
-           (reduce max))
+(defn f []
+  (->> (combos)
+       (filter permissible)
+       (map compute)
+       (reduce max)))
+
+(fact :solved
+      "Greatest product of four adjacent numbers"
+      (time (f))
       => 70600674)
 

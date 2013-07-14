@@ -4,8 +4,12 @@
   (:use [midje.sweet])
   (:use [midje.config]))
 
-(fact "10001st prime"
-      (nth lazy-primes 10000)
+(defn f []
+  (nth lazy-primes 10000))
+
+(fact :solved
+      "10001st prime"
+      (time (f))
       => 104743)
 
 
