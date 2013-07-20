@@ -13,11 +13,29 @@
 (defn multiple-of [n]
   #(= 0 (mod % n)))
 
-(defn palindrome?
-  "Is a number a palindrome"
-  [n]
-  (let [s (seq (str n))]
-    (= (reverse s) s)))
+(defn digits [n]
+  (loop [d nil
+         n n]
+    (if (zero? n) d
+        (recur (cons (mod n 10) d) (quot n 10)))))
+
+(defn to-num [digits]
+  (loop [acc 0
+         digits digits]
+    (if (empty? digits) acc
+        (recur (+ (first digits) (* 10 acc))
+               (rest digits)))))
+
+(defn reverse-num [n]
+  (loop [acc 0
+         n n]
+    (if (zero? n)
+      acc
+      (recur (+ (* 10 acc) (mod n 10))
+             (quot n 10)))))
+
+(defn palindrome? [n]
+  (= n (reverse-num n)))
 
 (defn lazy-sieve
   [[n & ns]]
@@ -50,24 +68,6 @@
          sort
          (remove #(= n %)))))
 
-(defn colatz
-  "Generate colatz sequence"
-  [start]
-  (reverse (loop [n start
-           chain []]
-      (cond (= 1 n) (cons 1 chain)
-            (even? n) (recur (/ n 2) (cons n chain))
-            (odd? n) (recur (inc (* 3 n)) (cons n chain))))))
-
-(defn n-colatz
-  "Get colatz sequence length"
-  [start]
-  (loop [n start
-         s 1]
-    (cond (= 1 n) s
-          (even? n) (recur (/ n 2) (inc s))
-          (odd? n) (recur (inc (* 3 n)) (inc s)))))
-
 (defn fetch-text-url
   "Fetch an url with text data"
   [url]
@@ -87,17 +87,6 @@
         (let [next (+ (* factor (mod cur 10)) (quot cur 10))]
           (if (zero? c) numbers
               (recur (conj numbers cur) (int next) (dec c))))))))
-
-(defn digits [n]
-  (->> n
-       str
-       seq
-       (map #(- (int %) 48))))
-
-(defn palindrome? [n]
-  (let [d (digits n)]
-    (= d (reverse d))))
-
 
 (defn perfect? [n]
   (= n (reduce + (divisors n))))

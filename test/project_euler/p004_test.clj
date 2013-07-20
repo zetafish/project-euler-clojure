@@ -5,19 +5,11 @@
 (defn d10 [n]
   (zero? (mod n 10)))
 
-(defn reverse-num [n]
-  (loop [acc 0
-         n n]
-    (if (zero? n)
-      acc
-      (recur (+ (* 10 acc) (mod n 10))
-             (quot n 10)))))
-
 (defn f []
   (->> (for [x (remove d10 (range 100 999))
              y (remove d10 (range x 999))]
          (* x y))
-       (filter #(= % (reverse-num %)))
+       (filter palindrome?)
        (reduce max)))
 
 (fact :solved

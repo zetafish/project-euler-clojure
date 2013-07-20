@@ -104,12 +104,14 @@
               20849603980134001723930671666823555245252804609722
               53503534226472524250874054075591789781264330331690])
 
-(fact "First ten digits of the sum of many 50-digit numbers"
-      (->>
-       (reduce + numbers)
+(defn f []
+  (->> numbers
+       (reduce +)
        digits
        (take 10)
-       (map #(char  (+ % 48)))
-       (apply str)
-       read-string)
+       to-num))
+
+(fact :solved
+      "First ten digits of the sum of many 50-digit numbers"
+      (time (f))
       => 5537376230)

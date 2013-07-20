@@ -6,7 +6,7 @@
   (reduce + (take-while #(< % 2000000)
                         lazy-primes)))
 
-(fact :solved
+(fact :solved :slow
       "Sum of all primes below 2 million"
       (time (f))
       => 142913828922)
