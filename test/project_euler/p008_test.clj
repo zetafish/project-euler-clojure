@@ -31,7 +31,7 @@
          (map #(reduce * %))
          (reduce max))) )
 
-(fact :solvedx
+(fact :solved
       "Largest product in a series"
       (time (f))
       => 40824)
