@@ -3,7 +3,7 @@
   (:use [midje.sweet]))
 
 (defn f []
-  (reduce max (factors 600851475143N)))
+  (reduce max (prime-factors 600851475143N)))
 
 (fact :solved
       "The largest prime factor of 600851475143"

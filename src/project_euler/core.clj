@@ -50,7 +50,7 @@
 (defn primes-below [n]
   (take-while #(< % n) lazy-primes))
 
-(defn factors [n]
+(defn prime-factors [n]
   (loop [primes (primes-below(inc n))
          factors ()
          n n]
@@ -59,14 +59,33 @@
             (zero? (mod n p)) (recur primes (cons p factors) (/ n p))
             :else (recur (rest primes) factors n)))))
 
+(def factors prime-factors)
+
 (defn divisors [n]
-  (let [f (factors n)]
+  (let [f (prime-factors n)]
     (->> (range (inc (count f)))
          (mapcat #(combinations f %))
          (map #(reduce * %))
          distinct
          sort
          (remove #(= n %)))))
+
+(defn divisors-count [n]
+  (->> (prime-factors n)
+       (partition-by identity)
+       (map #(inc (count %)))
+       (reduce *)))
+
+(defn divisors-sum [n]
+  (->> (prime-factors n)
+       (partition-by identity)
+       (map (fn [s] [(count s) (first s)]))
+       (map (fn [[a p]] (/ (dec (expt p (inc a)))
+                          (dec p))))
+       (reduce *)))
+
+(defn divisors-proper-sum [n]
+  (- (divisors-sum n) n))
 
 (defn fetch-text-url
   "Fetch an url with text data"
@@ -89,11 +108,11 @@
               (recur (conj numbers cur) (int next) (dec c))))))))
 
 (defn perfect? [n]
-  (= n (reduce + (divisors n))))
+  (= n (divisors-proper-sum n)))
 
 (defn deficient? [n]
-  (> n (reduce + (divisors n))))
+  (> n (divisors-proper-sum n)))
 
 (defn abundant? [n]
-  (< n (reduce + (divisors n))))
+  (< n (divisors-proper-sum n)))
 
